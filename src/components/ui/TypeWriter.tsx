@@ -43,7 +43,7 @@ export default function TypeWriter({
   return (
     <span className={className}>
       {text.slice(0, displayedLength)}
-      <span className="animate-blink text-white/50">|</span>
+      <span className="animate-blink text-green-400">|</span>
     </span>
   );
 }
