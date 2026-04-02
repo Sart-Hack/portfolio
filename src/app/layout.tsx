@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
+      className={`${inter.variable} ${jetbrainsMono.variable} antialiased overflow-x-hidden`}
     >
       <body className="bg-[#0a0a0f] text-gray-200 font-sans overflow-x-hidden">
         {children}
