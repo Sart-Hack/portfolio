@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           contents,
           generationConfig: {
-            maxOutputTokens: 500,
+            maxOutputTokens: 1024,
             temperature: 0.9,
           },
         }),
@@ -70,6 +70,7 @@ export async function POST(req: NextRequest) {
     // Stream SSE from Gemini to the client
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
+    let buffer = "";
 
     const stream = new ReadableStream({
       async start(controller) {
@@ -78,12 +79,17 @@ export async function POST(req: NextRequest) {
             const { done, value } = await reader.read();
             if (done) break;
 
-            const chunk = decoder.decode(value, { stream: true });
-            const lines = chunk.split("\n");
+            buffer += decoder.decode(value, { stream: true });
 
-            for (const line of lines) {
-              if (!line.startsWith("data: ")) continue;
-              const data = line.slice(6).trim();
+            // Process complete SSE lines from buffer
+            const parts = buffer.split("\n");
+            // Keep the last part as it may be incomplete
+            buffer = parts.pop() || "";
+
+            for (const line of parts) {
+              const trimmed = line.trim();
+              if (!trimmed.startsWith("data: ")) continue;
+              const data = trimmed.slice(6).trim();
               if (!data || data === "[DONE]") continue;
 
               try {
@@ -96,8 +102,26 @@ export async function POST(req: NextRequest) {
                   );
                 }
               } catch {
-                // skip malformed chunks
+                // partial JSON — will be completed in next read
+                buffer = line + "\n" + buffer;
+                break;
               }
+            }
+          }
+
+          // Process any remaining buffer
+          if (buffer.trim().startsWith("data: ")) {
+            const data = buffer.trim().slice(6).trim();
+            if (data && data !== "[DONE]") {
+              try {
+                const parsed = JSON.parse(data);
+                const text = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (text) {
+                  controller.enqueue(
+                    new TextEncoder().encode(`data: ${JSON.stringify({ text })}\n\n`)
+                  );
+                }
+              } catch { /* skip */ }
             }
           }
         } finally {

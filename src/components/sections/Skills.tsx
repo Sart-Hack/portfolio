@@ -287,8 +287,9 @@ export default function Skills() {
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
+      let sseBuffer = "";
 
-      // Start streaming — show the claude role header by adding a blank claude line
+      // Start streaming
       const streamStartIdx = startFrom + preLines.length;
       setLines((prev) => [...prev, { type: "blank", text: "" }]);
       setVisibleCount(streamStartIdx + 1);
@@ -298,12 +299,14 @@ export default function Skills() {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value, { stream: true });
-        const sseLines = chunk.split("\n");
+        sseBuffer += decoder.decode(value, { stream: true });
+        const parts = sseBuffer.split("\n");
+        sseBuffer = parts.pop() || "";
 
-        for (const sseLine of sseLines) {
-          if (!sseLine.startsWith("data: ")) continue;
-          const data = sseLine.slice(6).trim();
+        for (const sseLine of parts) {
+          const trimmed = sseLine.trim();
+          if (!trimmed.startsWith("data: ")) continue;
+          const data = trimmed.slice(6).trim();
           if (!data || data === "[DONE]") continue;
 
           try {
@@ -313,7 +316,7 @@ export default function Skills() {
               setStreamingText(fullText);
             }
           } catch {
-            // skip
+            // partial JSON, will be in next chunk
           }
         }
       }
