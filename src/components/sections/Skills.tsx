@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import { gsap } from "@/lib/gsap";
+import ReactMarkdown from "react-markdown";
 import TextReveal from "@/components/ui/TextReveal";
 
 interface TermLine {
@@ -29,12 +30,11 @@ const initialScript: TermLine[] = [
   { type: "blank", text: "" },
   { type: "claude", text: "Tech stack identified:" },
   { type: "blank", text: "" },
-  { type: "claude", text: "Claude Code" },
+  { type: "claude", text: "**Claude Code**" },
   { type: "blank", text: "" },
   { type: "claude", text: "That's it. That's the whole stack." },
 ];
 
-// Fallback if API fails
 const fallbackResponses = [
   "I'm taking a break. Try again in a sec.",
   "Even Claude needs a moment sometimes.",
@@ -52,6 +52,76 @@ function Spinner() {
   return <span className="text-[#D97757]">{spinnerFrames[frame]}</span>;
 }
 
+// Markdown renderer styled like Claude Code terminal output
+function ClaudeMarkdown({ text }: { text: string }) {
+  return (
+    <ReactMarkdown
+      components={{
+        // Bold: white bold
+        strong: ({ children }) => (
+          <strong className="text-white font-bold">{children}</strong>
+        ),
+        // Italic: dim
+        em: ({ children }) => (
+          <em className="text-gray-400 italic">{children}</em>
+        ),
+        // Inline code: blue
+        code: ({ className, children }) => {
+          const isBlock = className?.includes("language-");
+          if (isBlock) {
+            return (
+              <code className="block my-1.5 text-[13px] text-blue-300 whitespace-pre-wrap">
+                {children}
+              </code>
+            );
+          }
+          return <code className="text-blue-400">{children}</code>;
+        },
+        // Code blocks
+        pre: ({ children }) => (
+          <pre className="my-1 font-mono">{children}</pre>
+        ),
+        // Paragraphs
+        p: ({ children }) => (
+          <p className="py-0.5 font-mono text-sm text-gray-200">{children}</p>
+        ),
+        // Lists
+        ul: ({ children }) => (
+          <ul className="py-0.5 font-mono text-sm text-gray-200 space-y-0.5">{children}</ul>
+        ),
+        ol: ({ children }) => (
+          <ol className="py-0.5 font-mono text-sm text-gray-200 space-y-0.5">{children}</ol>
+        ),
+        li: ({ children }) => (
+          <li className="font-mono text-sm text-gray-200">
+            <span className="text-gray-500 mr-1">-</span>{children}
+          </li>
+        ),
+        // Blockquote: dim italic
+        blockquote: ({ children }) => (
+          <blockquote className="text-gray-500 italic border-l-2 border-gray-700 pl-3 my-1">{children}</blockquote>
+        ),
+        // Headings
+        h1: ({ children }) => (
+          <p className="font-bold italic underline text-white py-0.5 font-mono text-sm">{children}</p>
+        ),
+        h2: ({ children }) => (
+          <p className="font-bold text-white py-0.5 font-mono text-sm">{children}</p>
+        ),
+        h3: ({ children }) => (
+          <p className="font-bold text-gray-300 py-0.5 font-mono text-sm">{children}</p>
+        ),
+        // Links: blue
+        a: ({ children, href }) => (
+          <a href={href} className="text-blue-400 underline" target="_blank" rel="noopener noreferrer">{children}</a>
+        ),
+      }}
+    >
+      {text}
+    </ReactMarkdown>
+  );
+}
+
 function TerminalLine({ line, isLatestThinking }: { line: TermLine; isLatestThinking?: boolean }) {
   if (line.type === "blank") return <div className="h-2" />;
 
@@ -67,7 +137,7 @@ function TerminalLine({ line, isLatestThinking }: { line: TermLine; isLatestThin
   if (line.type === "claude") {
     return (
       <div className="py-0.5">
-        <span className="font-mono text-sm text-gray-200">{line.text}</span>
+        <ClaudeMarkdown text={line.text} />
       </div>
     );
   }
@@ -98,7 +168,6 @@ function RoleHeader({ type }: { type: "user" | "claude" }) {
 
 function AsciiBanner({ visible }: { visible: boolean }) {
   if (!visible) return null;
-
   return (
     <div className="mb-3">
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -125,6 +194,8 @@ export default function Skills() {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [initialDone, setInitialDone] = useState(false);
+  // Streaming state: the currently streaming claude response text
+  const [streamingText, setStreamingText] = useState<string | null>(null);
   const chatHistory = useRef<{ role: string; text: string }[]>([]);
   const fallbackIdx = useRef(0);
   const hasTriggered = useRef(false);
@@ -157,16 +228,11 @@ export default function Skills() {
           onEnter: () => {
             if (hasTriggered.current) return;
             hasTriggered.current = true;
-
-            // Show banner immediately
             setBannerVisible(true);
-
-            // Start conversation after a pause
             setTimeout(() => {
               setLines(initialScript);
               typeOutLines(initialScript, 0);
             }, 800);
-
             setTimeout(() => setInitialDone(true), 800 + initialScript.length * 200 + 1200);
           },
         },
@@ -175,12 +241,12 @@ export default function Skills() {
     return () => ctx.revert();
   }, [typeOutLines]);
 
-  // Auto-scroll only the chat area
+  // Auto-scroll
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
-  }, [visibleCount]);
+  }, [visibleCount, streamingText]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -190,7 +256,7 @@ export default function Skills() {
     setInputValue("");
     setIsTyping(true);
 
-    // Add user message + thinking indicator
+    // Add user message + thinking
     const userLine: TermLine = { type: "user", text: userText };
     const blank: TermLine = { type: "blank", text: "" };
     const thinkingLine: TermLine = { type: "thinking", text: `${randomVerb()}...` };
@@ -201,11 +267,10 @@ export default function Skills() {
     setLines((prev) => [...prev, ...preLines]);
     setVisibleCount(startFrom + preLines.length);
 
-    // Track history for multi-turn
     chatHistory.current.push({ role: "user", text: userText });
 
-    // Call API
-    let responseText: string;
+    // Stream response
+    let fullText = "";
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -215,37 +280,59 @@ export default function Skills() {
           history: chatHistory.current,
         }),
       });
-      const data = await res.json();
-      responseText = data.text || "...";
+
+      if (!res.ok || !res.body) {
+        throw new Error("API error");
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+
+      // Start streaming — show the claude role header by adding a blank claude line
+      const streamStartIdx = startFrom + preLines.length;
+      setLines((prev) => [...prev, { type: "blank", text: "" }]);
+      setVisibleCount(streamStartIdx + 1);
+      setStreamingText("");
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const sseLines = chunk.split("\n");
+
+        for (const sseLine of sseLines) {
+          if (!sseLine.startsWith("data: ")) continue;
+          const data = sseLine.slice(6).trim();
+          if (!data || data === "[DONE]") continue;
+
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.text) {
+              fullText += parsed.text;
+              setStreamingText(fullText);
+            }
+          } catch {
+            // skip
+          }
+        }
+      }
     } catch {
-      responseText = fallbackResponses[fallbackIdx.current % fallbackResponses.length];
+      fullText = fallbackResponses[fallbackIdx.current % fallbackResponses.length];
       fallbackIdx.current++;
     }
 
-    chatHistory.current.push({ role: "model", text: responseText });
+    // Finalize: replace streaming state with permanent line
+    setStreamingText(null);
+    chatHistory.current.push({ role: "model", text: fullText });
 
-    // Split response into lines and type them out
-    const responseLines: TermLine[] = [
-      { type: "blank", text: "" },
-      ...responseText.split("\n").filter(Boolean).map((t: string) => ({
-        type: "claude" as const,
-        text: t,
-      })),
-    ];
-
-    const responseStart = startFrom + preLines.length;
-    setLines((prev) => [...prev, ...responseLines]);
-
-    // Type out response lines with delay
-    let delay = 0;
-    responseLines.forEach((line, i) => {
-      const extra = line.type === "blank" ? 80 : 150;
-      delay += extra;
-      setTimeout(() => {
-        setVisibleCount(responseStart + i + 1);
-        if (i === responseLines.length - 1) setIsTyping(false);
-      }, delay);
+    const finalLine: TermLine = { type: "claude", text: fullText || "..." };
+    setLines((prev) => {
+      const updated = [...prev, finalLine];
+      setVisibleCount(updated.length);
+      return updated;
     });
+    setIsTyping(false);
   };
 
   const renderLines = () => {
@@ -259,12 +346,13 @@ export default function Skills() {
         continue;
       }
 
-      // Hide thinking lines once a claude response after them is visible
+      // Hide thinking once response after it is visible
       if (line.type === "thinking") {
         const hasResponseAfter = lines
           .slice(i + 1, visibleCount)
           .some((l) => l.type === "claude");
-        if (hasResponseAfter) continue; // response loaded — hide the thinking text
+        // Also hide if we're currently streaming (which means response started)
+        if (hasResponseAfter || streamingText !== null) continue;
       }
 
       const role = line.type === "user" ? "user" : "claude";
@@ -301,16 +389,30 @@ export default function Skills() {
             <span className="ml-3 text-[11px] text-gray-600 font-mono">~/portfolio</span>
           </div>
 
-          {/* Banner area — always visible, never scrolls away */}
+          {/* Banner */}
           <div className="px-5 pt-4 pb-2 border-b border-white/4">
             <AsciiBanner visible={bannerVisible} />
           </div>
 
-          {/* Chat area — scrollable independently */}
+          {/* Chat area */}
           <div ref={chatRef} className="px-5 py-3 max-h-[280px] overflow-y-auto">
             {renderLines()}
 
-            {isTyping && (
+            {/* Streaming text — renders live as chunks arrive */}
+            {streamingText !== null && (
+              <div className="py-0.5">
+                {/* Show Claude header if not already shown */}
+                <div className="flex items-center gap-1.5 pt-2 pb-1">
+                  <span className="text-[#D97757]">⏺</span>
+                  <span className="font-mono text-xs font-semibold text-[#D97757]">Claude</span>
+                </div>
+                <ClaudeMarkdown text={streamingText} />
+                <span className="inline-block w-1.5 h-4 bg-[#D97757] animate-blink" />
+              </div>
+            )}
+
+            {/* Typing cursor during initial script */}
+            {isTyping && streamingText === null && (
               <div className="py-0.5">
                 <span className="inline-block w-1.5 h-4 bg-[#D97757] animate-blink" />
               </div>

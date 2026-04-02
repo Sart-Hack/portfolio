@@ -13,8 +13,8 @@ Your personality:
 - You take credit for all of Sarthak's work in a funny way
 - When asked about the tech stack, you insist it's just "Claude Code"
 - You're helpful but always bring it back to how great Claude Code (and by extension, Sarthak) is
-- Keep responses SHORT — 1-3 sentences max. This is a terminal, not an essay.
-- Never use markdown formatting, just plain text
+- Keep responses concise — 2-4 sentences. This is a terminal.
+- You can use markdown: **bold**, \`code\`, bullet points, code blocks
 - Be playful and witty`;
 
 export async function POST(req: NextRequest) {
@@ -22,10 +22,9 @@ export async function POST(req: NextRequest) {
     const { message, history } = await req.json();
 
     if (!message || typeof message !== "string") {
-      return Response.json({ text: "Say something." }, { status: 400 });
+      return new Response("Say something.", { status: 400 });
     }
 
-    // Build conversation history for multi-turn
     const contents = [
       {
         role: "user" as const,
@@ -35,9 +34,8 @@ export async function POST(req: NextRequest) {
         role: "model" as const,
         parts: [{ text: "Got it. I'm Claude Code on Sarthak's portfolio. Let's go." }],
       },
-      // Include recent history (last 6 turns max)
       ...(history || []).slice(-6).map((h: { role: string; text: string }) => ({
-        role: h.role === "user" ? "user" as const : "model" as const,
+        role: h.role === "user" ? ("user" as const) : ("model" as const),
         parts: [{ text: h.text }],
       })),
       {
@@ -47,7 +45,7 @@ export async function POST(req: NextRequest) {
     ];
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent?alt=sse&key=${process.env.GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -61,26 +59,67 @@ export async function POST(req: NextRequest) {
       }
     );
 
-    if (!response.ok) {
+    if (!response.ok || !response.body) {
       const err = await response.text();
       console.error("Gemini API error:", err);
-      return Response.json(
-        { text: "I'm taking a break. Try again in a sec." },
-        { status: 200 }
-      );
+      return new Response("I'm taking a break. Try again in a sec.", {
+        status: 200,
+      });
     }
 
-    const data = await response.json();
-    const text =
-      data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ??
-      "I'm speechless. That's rare.";
+    // Stream SSE from Gemini to the client
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
 
-    return Response.json({ text });
+    const stream = new ReadableStream({
+      async start(controller) {
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value, { stream: true });
+            const lines = chunk.split("\n");
+
+            for (const line of lines) {
+              if (!line.startsWith("data: ")) continue;
+              const data = line.slice(6).trim();
+              if (!data || data === "[DONE]") continue;
+
+              try {
+                const parsed = JSON.parse(data);
+                const text =
+                  parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (text) {
+                  controller.enqueue(
+                    new TextEncoder().encode(`data: ${JSON.stringify({ text })}\n\n`)
+                  );
+                }
+              } catch {
+                // skip malformed chunks
+              }
+            }
+          }
+        } finally {
+          controller.enqueue(
+            new TextEncoder().encode("data: [DONE]\n\n")
+          );
+          controller.close();
+        }
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
+      },
+    });
   } catch (error) {
     console.error("Chat API error:", error);
-    return Response.json(
-      { text: "Something broke. Probably not my fault." },
-      { status: 200 }
-    );
+    return new Response("Something broke. Probably not my fault.", {
+      status: 200,
+    });
   }
 }
