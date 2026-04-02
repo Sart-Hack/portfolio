@@ -3,7 +3,6 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useMemo } from "react";
 import { Preload, AdaptiveDpr } from "@react-three/drei";
-import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import * as THREE from "three";
 import { useScrollProgress, scrollProgress } from "@/hooks/useScrollProgress";
 import CircuitCity from "./CircuitCity";
@@ -52,29 +51,16 @@ function SceneContent() {
       <CameraController />
       <AdaptiveDpr pixelated />
 
-      {/* Bright, clean lighting */}
       <ambientLight intensity={0.6} />
       <directionalLight position={[10, 15, 5]} intensity={1} color="#ffffff" />
-      <directionalLight position={[-5, 10, -5]} intensity={0.3} color="#ffffff" />
-
-      {/* Soft fill from below */}
-      <pointLight position={[0, 3, 0]} color="#ffffff" intensity={0.4} distance={15} />
+      {!isMobile && (
+        <directionalLight position={[-5, 10, -5]} intensity={0.3} color="#ffffff" />
+      )}
 
       <CircuitCity />
-      <Particles />
+      {!isMobile && <Particles />}
 
       <Preload all />
-
-      {/* Subtle post-processing */}
-      <EffectComposer>
-        <Bloom
-          luminanceThreshold={isMobile ? 0.8 : 0.6}
-          luminanceSmoothing={0.95}
-          intensity={isMobile ? 0.3 : 0.5}
-          mipmapBlur
-        />
-        <Vignette eskil={false} offset={0.15} darkness={0.3} />
-      </EffectComposer>
     </>
   );
 }
@@ -83,9 +69,10 @@ export default function Scene() {
   return (
     <Canvas
       camera={{ position: [10, 12, 10], fov: 40 }}
-      gl={{ antialias: true, alpha: true }}
+      gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       dpr={[1, 1.5]}
       style={{ background: "transparent" }}
+      frameloop="always"
     >
       <Suspense fallback={null}>
         <SceneContent />

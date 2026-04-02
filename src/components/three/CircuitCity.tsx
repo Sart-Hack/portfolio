@@ -220,11 +220,11 @@ function Buildings({ buildings }: { buildings: Building[] }) {
     meshRef.current.instanceColor!.needsUpdate = true;
   }, [buildings]);
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (!meshRef.current) return;
 
     const scroll = scrollProgress.value;
-    const time = state.clock.elapsedTime;
+    let matrixChanged = false;
 
     buildings.forEach((b, i) => {
       const activationProgress = Math.max(
@@ -232,15 +232,16 @@ function Buildings({ buildings }: { buildings: Building[] }) {
         Math.min(1, (scroll - b.threshold) / 0.15)
       );
       const targetHeight = b.maxHeight * activationProgress;
+      const prev = currentHeights.current[i];
 
-      currentHeights.current[i] = THREE.MathUtils.damp(
-        currentHeights.current[i],
-        targetHeight,
-        5,
-        delta
-      );
+      currentHeights.current[i] = THREE.MathUtils.damp(prev, targetHeight, 5, delta);
 
       const h = currentHeights.current[i];
+
+      // Skip update if height hasn't changed meaningfully
+      if (Math.abs(h - prev) < 0.001 && h > 0.01) return;
+
+      matrixChanged = true;
 
       if (h < 0.01) {
         dummy.scale.set(0, 0, 0);
@@ -251,16 +252,11 @@ function Buildings({ buildings }: { buildings: Building[] }) {
 
       dummy.updateMatrix();
       meshRef.current!.setMatrixAt(i, dummy.matrix);
-
-      // Very subtle brightness pulse when fully active
-      const brightness = activationProgress * (0.03 + Math.sin(time * 0.8 + i * 0.3) * 0.015);
-      const color = b.color.clone().lerp(b.accentColor, brightness);
-      meshRef.current!.setColorAt(i, color);
     });
 
-    meshRef.current.instanceMatrix.needsUpdate = true;
-    if (meshRef.current.instanceColor)
-      meshRef.current.instanceColor.needsUpdate = true;
+    if (matrixChanged) {
+      meshRef.current.instanceMatrix.needsUpdate = true;
+    }
   });
 
   return (

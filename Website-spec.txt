@@ -1,0 +1,212 @@
+Portfolio Website Spec - Sarthak Gupta
+Context
+Sarthak is an AI Innovation Specialist at IgniteTech (also working with Khoros and Voriq AI), studying CS at Delhi Technological University. He wants an impressive, scroll-driven 3D portfolio website inspired by oryzo.ai's cinematic scroll experience, with a futuristic/techy aesthetic.
+
+Tech Stack
+Tool	Purpose
+Next.js 14 (App Router)	Framework, SSR, routing
+React Three Fiber (@react-three/fiber)	3D rendering
+@react-three/drei	3D helpers (Environment, ContactShadows, useGLTF, Float, etc.)
+GSAP + ScrollTrigger	Scroll-driven animation timelines
+Lenis	Smooth scrolling
+Tailwind CSS	Styling
+TypeScript	Type safety
+Vercel	Hosting (subdomain)
+Design Direction: Futuristic / Techy
+Background: Deep black/dark navy (#0a0a0f) with subtle grid lines or dot matrix pattern
+Accent colors: Electric cyan (#00f0ff), neon purple (#8b5cf6), with subtle green (#22c55e) highlights
+Typography: Monospace for headers (JetBrains Mono or Space Mono), clean sans-serif for body (Inter)
+Visual effects: Scanline overlays, glowing borders, particle backgrounds, terminal-style text reveals
+Overall feel: Like a high-tech command center / AI dashboard aesthetic
+Sections & Scroll Flow
+The entire page is one continuous scroll experience. Each section occupies ~100vh and transitions are driven by GSAP ScrollTrigger scrubbing.
+
+Section 1: Hero (100vh)
+Layout:
+
+Full-screen dark canvas
+3D floating laptop/desk scene centered
+Name "SARTHAK GUPTA" in large monospace type, glitch/terminal-style reveal animation
+Subtitle: "AI Innovation Specialist" with a typing/cursor effect
+Subtle floating particles or grid lines in the background
+Small scroll indicator arrow at bottom with pulse animation
+3D Scene:
+
+A stylized low-poly or sci-fi laptop model floating in space
+Laptop screen glows with a subtle cyan light
+The laptop slowly rotates on idle (auto-rotation)
+On scroll down: laptop opens wider, camera pushes in, screen content becomes visible (showing code/terminal text)
+Holographic elements floating around the laptop (data nodes, connection lines)
+Scroll behavior (0% - 25%):
+
+0%: Laptop closed/half-open, name visible, wide camera shot
+12%: Name fades up and out, laptop fully opens
+25%: Camera zooms past the laptop screen, transition into About section
+Section 2: About Me (100vh)
+Layout:
+
+Split layout: left side has text content, right side has the 3D scene continuing (laptop now in background, smaller)
+Brief intro paragraph with terminal-style text reveal (characters appear one by one or line by line)
+Key stats/highlights as glowing cards:
+"2+ years" at IgniteTech
+"AI & Full-Stack" specialization
+"DTU, Computer Science" education
+"500+ connections" (or replace with a more meaningful metric)
+Tech stack icons floating in 3D space on the right side
+Content:
+
+AI Innovation Specialist building enterprise AI products at IgniteTech. I work across the full stack - from training models to shipping production UIs. Currently focused on AI-powered solutions at Khoros and consulting for Voriq AI.
+
+Scroll behavior (25% - 50%):
+
+25%: Section fades in, stats cards stagger in from left
+35%: Tech icons appear and float
+50%: Everything slides up and out
+Section 3: Experience Timeline (200vh - extra scroll space for the timeline)
+Layout:
+
+Vertical timeline running down the center of the screen
+Each role appears as a card that animates in from alternating sides (left/right)
+Timeline line draws itself as you scroll (SVG path animation)
+Glowing node dots at each role junction
+The 3D scene in the background shows floating geometric shapes that morph/change with each role
+Timeline entries (top to bottom, most recent first):
+
+AI Innovation Specialist - Khoros (Jul 2025 - Present)
+
+Texas, US (Remote)
+Cyan accent
+Consultant - Voriq AI (May 2025 - Present)
+
+New Delhi (On-site)
+Purple accent
+AI Innovation Specialist - IgniteTech (Jun 2024 - Present)
+
+United States (Remote)
+Cyan accent
+Full-stack Developer - Turing (Mar 2024 - Jun 2024)
+
+Remote
+Green accent
+Co-Founder - The Hyper Brand (Nov 2023 - Mar 2024)
+
+New Delhi (On-site)
+Purple accent
+Scroll behavior (50% - 80%):
+
+Each card animates in as its scroll position is reached
+Timeline line progressively draws
+Background 3D shapes morph between roles
+Cards have a subtle parallax offset (move slightly slower than scroll)
+Section 4: Contact / Footer (100vh)
+Layout:
+
+Large headline: "LET'S CONNECT" or "GET IN TOUCH" in glitch-style text
+Centered layout with social links as glowing icon buttons:
+LinkedIn (linkedin.com/in/sarthak124)
+GitHub
+Email
+A simple contact form (name, email, message) with neon-bordered inputs OR just the social links (simpler)
+The 3D laptop from the hero reappears in the background, slowly floating away/dissolving into particles
+Footer with copyright line
+Scroll behavior (80% - 100%):
+
+Headline glitches in
+Social icons stagger in with glow pulse
+3D laptop fades back in from particles
+Subtle ambient particle animation continues
+3D Model Details
+Laptop/Desk Scene
+Source: Free GLTF model from Sketchfab (e.g., "Sci-fi laptop", "Cyberpunk workstation") or create a simple one in Spline
+Fallback: If no good free model exists, use a simple procedural geometry (box + plane for screen) with emissive materials and glowing edges
+Lighting: Single directional light + cyan point light from the "screen" + subtle ambient
+Environment: Use drei's <Environment> with a dark HDRI for reflections
+Post-processing: Optional bloom effect on the screen glow (via @react-three/postprocessing)
+Background Elements
+Floating particles (drei's <Stars> or custom particle system)
+Grid floor that fades into the distance
+Optional: scanning line effect (CSS overlay)
+Performance Considerations
+Lazy load 3D scene: Use React.lazy + Suspense with a loading screen
+Model optimization: Keep GLTF under 2MB, use Draco compression
+Mobile: Reduce particle count, simplify 3D scene, fallback to CSS animations if WebGL not supported
+Prefers-reduced-motion: Respect user preference, disable scroll animations
+Project Structure
+
+sarthak-portfolio/
+  src/
+    app/
+      layout.tsx          -- Root layout with fonts, metadata
+      page.tsx            -- Main page, assembles all sections
+      globals.css         -- Tailwind base + custom CSS (grid bg, scanlines, glitch)
+    components/
+      SmoothScroll.tsx    -- Lenis provider setup
+      three/
+        Scene.tsx         -- Main R3F Canvas + camera + lights
+        Laptop.tsx        -- Laptop 3D model component
+        Particles.tsx     -- Background particle system
+        GridFloor.tsx     -- Infinite grid floor effect
+      sections/
+        Hero.tsx          -- Hero section with title + scroll indicator
+        About.tsx         -- About section with stats cards
+        Timeline.tsx      -- Experience timeline
+        Contact.tsx       -- Contact section + social links
+      ui/
+        GlitchText.tsx    -- Text with glitch/terminal reveal effect
+        GlowCard.tsx      -- Card with neon border glow
+        TypeWriter.tsx    -- Typing animation component
+    hooks/
+      useScrollProgress.ts -- Custom hook for normalized scroll progress
+    lib/
+      gsap.ts            -- GSAP + ScrollTrigger registration + Lenis sync
+    data/
+      experience.ts      -- Timeline data (roles, dates, companies)
+  public/
+    models/
+      laptop.glb         -- 3D laptop model
+    fonts/               -- Self-hosted fonts if needed
+  tailwind.config.ts
+  next.config.ts
+  package.json
+  tsconfig.json
+Key Dependencies
+
+{
+  "dependencies": {
+    "next": "^14",
+    "react": "^18",
+    "react-dom": "^18",
+    "@react-three/fiber": "^8",
+    "@react-three/drei": "^9",
+    "@react-three/postprocessing": "^2",
+    "three": "^0.168",
+    "gsap": "^3",
+    "lenis": "^1",
+    "tailwindcss": "^3"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/react": "^18",
+    "@types/three": "^0.168"
+  }
+}
+Implementation Order
+Scaffold: npx create-next-app with TypeScript + Tailwind + App Router
+Smooth scroll: Set up Lenis + GSAP ScrollTrigger sync
+3D scene: Basic R3F canvas with lighting + environment
+Hero section: Title, subtitle, scroll indicator + 3D laptop with scroll-driven rotation
+About section: Stats cards with scroll-triggered stagger animations
+Timeline section: SVG path draw + alternating cards with scroll triggers
+Contact section: Social links + glitch headline + closing 3D animation
+Polish: Glitch effects, particles, bloom post-processing, grid background
+Mobile: Responsive breakpoints, reduced 3D complexity
+Deploy: Push to GitHub, connect Vercel
+Verification
+npm run dev runs locally without errors
+Scroll from top to bottom is smooth and all animations trigger correctly
+3D model loads and responds to scroll
+All sections are visible and content is accurate
+Mobile viewport (375px) is usable
+Lighthouse performance score > 70
+npm run build succeeds
+Deploy to Vercel works
