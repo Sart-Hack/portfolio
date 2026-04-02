@@ -81,9 +81,9 @@ export default function About() {
               key={stat.label}
               className="
                 border border-white/8 rounded-xl p-6
-                bg-white/[0.15]
+                bg-[#161620]
                 transition-all duration-300
-                hover:bg-white/20 hover:border-white/15 hover:-translate-y-1
+                hover:bg-[#1c1c28] hover:border-white/15 hover:-translate-y-1
               "
             >
               <div className="text-3xl md:text-4xl font-semibold tracking-tight text-white">

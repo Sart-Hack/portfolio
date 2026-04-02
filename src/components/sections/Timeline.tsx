@@ -83,7 +83,7 @@ export default function Timeline() {
                 >
                   <div className={`timeline-dot absolute left-1/2 -translate-x-1/2 top-7 w-2 h-2 rounded-full ${colors.dot} z-10 hidden md:block ring-[3px] ring-[#0a0a0f]`} />
 
-                  <div className={`w-full md:w-[44%] border ${colors.border} bg-white/[0.15] rounded-xl p-7 transition-all duration-300 hover:bg-white/20 hover:border-white/15 hover:-translate-y-0.5`}>
+                  <div className={`w-full md:w-[44%] border ${colors.border} bg-[#161620] rounded-xl p-7 transition-all duration-300 hover:bg-[#1c1c28] hover:border-white/15 hover:-translate-y-0.5`}>
                     <div className={`text-[11px] uppercase tracking-[0.18em] ${colors.text} mb-3 font-medium`}>
                       {exp.period}
                     </div>
