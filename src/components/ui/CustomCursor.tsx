@@ -1,14 +1,21 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
 
 export default function CustomCursor() {
   const glowRef = useRef<HTMLDivElement>(null);
   const mouse = useRef({ x: 0, y: 0 });
+  const [isMounted, setIsMounted] = useState(false);
+  const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return;
+    setIsMounted(true);
+    setIsTouch(window.matchMedia("(pointer: coarse)").matches);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted || isTouch) return;
 
     const glow = glowRef.current;
     if (!glow) return;
@@ -53,24 +60,22 @@ export default function CustomCursor() {
       document.removeEventListener("mouseover", onMouseOver);
       document.removeEventListener("mouseout", onMouseOut);
     };
-  }, []);
+  }, [isMounted, isTouch]);
 
-  if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return null;
+  // Render nothing on server and on first client render to avoid hydration mismatch
+  if (!isMounted || isTouch) return null;
 
   return (
-    <>
-      {/* Keep default arrow cursor, just add a trailing glow */}
-      <div
-        ref={glowRef}
-        className="fixed top-0 left-0 pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 opacity-0"
-        style={{
-          width: 40,
-          height: 40,
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)",
-          filter: "blur(2px)",
-        }}
-      />
-    </>
+    <div
+      ref={glowRef}
+      className="fixed top-0 left-0 pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 opacity-0"
+      style={{
+        width: 40,
+        height: 40,
+        borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)",
+        filter: "blur(2px)",
+      }}
+    />
   );
 }
