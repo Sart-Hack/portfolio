@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { gsap } from "@/lib/gsap";
 
 export default function CustomCursor() {
-  const glowRef = useRef<HTMLDivElement>(null);
-  const mouse = useRef({ x: 0, y: 0 });
+  const spotlightRef = useRef<HTMLDivElement>(null);
   const [isMounted, setIsMounted] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
 
@@ -17,65 +15,51 @@ export default function CustomCursor() {
   useEffect(() => {
     if (!isMounted || isTouch) return;
 
-    const glow = glowRef.current;
-    if (!glow) return;
+    const spotlight = spotlightRef.current;
+    if (!spotlight) return;
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let currentX = 0;
+    let currentY = 0;
 
     const onMouseMove = (e: MouseEvent) => {
-      mouse.current.x = e.clientX;
-      mouse.current.y = e.clientY;
-    };
-
-    const onMouseOver = (e: MouseEvent) => {
-      if ((e.target as HTMLElement).closest("a, button, [role='button'], input, textarea, [data-hover]")) {
-        gsap.to(glow, { scale: 2.5, opacity: 0.5, duration: 0.3, ease: "power2.out" });
-      }
-    };
-
-    const onMouseOut = (e: MouseEvent) => {
-      if ((e.target as HTMLElement).closest("a, button, [role='button'], input, textarea, [data-hover]")) {
-        gsap.to(glow, { scale: 1, opacity: 0.3, duration: 0.3, ease: "power2.out" });
-      }
+      mouseX = e.clientX;
+      mouseY = e.clientY;
     };
 
     window.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseover", onMouseOver);
-    document.addEventListener("mouseout", onMouseOut);
 
+    let raf: number;
     const animate = () => {
-      gsap.to(glow, {
-        x: mouse.current.x,
-        y: mouse.current.y,
-        duration: 0.4,
-        ease: "power2.out",
-      });
-      requestAnimationFrame(animate);
+      // Smooth lerp for trailing effect
+      currentX += (mouseX - currentX) * 0.15;
+      currentY += (mouseY - currentY) * 0.15;
+
+      spotlight.style.background = `radial-gradient(
+        300px circle at ${currentX}px ${currentY}px,
+        rgba(255, 255, 255, 0.04) 0%,
+        rgba(255, 255, 255, 0.015) 40%,
+        transparent 70%
+      )`;
+
+      raf = requestAnimationFrame(animate);
     };
 
-    const raf = requestAnimationFrame(animate);
-    gsap.to(glow, { opacity: 0.3, duration: 0.5, delay: 0.5 });
+    raf = requestAnimationFrame(animate);
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseover", onMouseOver);
-      document.removeEventListener("mouseout", onMouseOut);
     };
   }, [isMounted, isTouch]);
 
-  // Render nothing on server and on first client render to avoid hydration mismatch
   if (!isMounted || isTouch) return null;
 
   return (
     <div
-      ref={glowRef}
-      className="fixed top-0 left-0 pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 opacity-0"
-      style={{
-        width: 40,
-        height: 40,
-        borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)",
-        filter: "blur(2px)",
-      }}
+      ref={spotlightRef}
+      className="fixed inset-0 pointer-events-none z-[9998]"
     />
   );
 }
