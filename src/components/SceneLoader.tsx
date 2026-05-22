@@ -5,16 +5,21 @@ import { useState, useEffect } from "react";
 
 const Scene = dynamic(() => import("@/components/three/Scene"), { ssr: false });
 
+function detectCanRender3D() {
+  if (typeof window === "undefined") return true;
+  try {
+    const canvas = document.createElement("canvas");
+    if (!(canvas.getContext("webgl2") || canvas.getContext("webgl"))) return false;
+  } catch {
+    return false;
+  }
+  return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 function useCanRender3D() {
-  const [canRender, setCanRender] = useState(true);
-  useEffect(() => {
-    try {
-      const canvas = document.createElement("canvas");
-      const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
-      if (!gl) { setCanRender(false); return; }
-    } catch { setCanRender(false); return; }
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) setCanRender(false);
-  }, []);
+  // Lazy initializer runs once. SSR returns true; client returns real value.
+  // Scene is dynamic ssr:false, so any client-server divergence here is invisible.
+  const [canRender] = useState(detectCanRender3D);
   return canRender;
 }
 
@@ -39,7 +44,10 @@ export default function SceneLoader() {
           <div className="h-full bg-white/30 rounded-full transition-all duration-[1500ms] ease-out" style={{ width: loaded ? "100%" : "60%" }} />
         </div>
       </div>
-      <div className="fixed inset-0 z-0 pointer-events-none"><Scene /></div>
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <Scene />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0f]/40 to-[#0a0a0f]/80 pointer-events-none" />
+      </div>
     </>
   );
 }

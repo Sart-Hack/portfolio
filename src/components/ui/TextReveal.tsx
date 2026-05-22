@@ -27,6 +27,7 @@ export default function TextReveal({
 
   useEffect(() => {
     if (!ref.current) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const splitConfig =
       splitType === "chars"

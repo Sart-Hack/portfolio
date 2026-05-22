@@ -44,13 +44,11 @@ function generateBuildings(): Building[] {
       const heightBase = Math.max(0.3, 3.5 - distFromCenter * 0.2);
       const heightVariation = seededRandom(seed + 1) * 2;
 
-      // Minimal monochrome palette — warm whites and cool grays
       const warmth = seededRandom(seed + 6);
-      const baseGray = 0.85 + warmth * 0.12;
-      // Slight warm/cool tint per district instead of saturated colors
-      const tintR = district % 2 === 0 ? baseGray + 0.02 : baseGray - 0.01;
+      const baseGray = 0.18 + warmth * 0.08;
+      const tintR = district % 2 === 0 ? baseGray + 0.015 : baseGray - 0.005;
       const tintG = baseGray;
-      const tintB = district % 2 === 0 ? baseGray - 0.01 : baseGray + 0.02;
+      const tintB = district % 2 === 0 ? baseGray - 0.005 : baseGray + 0.015;
 
       buildings.push({
         x: gx * spacing + seededRandom(seed + 2) * 0.3,

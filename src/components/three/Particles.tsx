@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { scrollProgress } from "@/hooks/useScrollProgress";
@@ -10,7 +10,9 @@ export default function Particles() {
 
   const count = typeof window !== "undefined" && window.innerWidth < 768 ? 150 : 400;
 
-  const { positions, velocities } = useMemo(() => {
+  // Lazy useState init — generate random positions once. Component is rendered
+  // inside a client-only Scene, so SSR is not a concern. count is mount-stable.
+  const [{ positions, velocities }] = useState(() => {
     const pos = new Float32Array(count * 3);
     const vel = new Float32Array(count);
 
@@ -22,7 +24,7 @@ export default function Particles() {
     }
 
     return { positions: pos, velocities: vel };
-  }, [count]);
+  });
 
   useFrame((_, delta) => {
     if (!ref.current) return;

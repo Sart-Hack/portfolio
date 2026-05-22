@@ -1,24 +1,24 @@
-import SmoothScroll from "@/components/SmoothScroll";
-import SceneLoader from "@/components/SceneLoader";
-import CustomCursor from "@/components/ui/CustomCursor";
+import SiteShell from "@/components/SiteShell";
 import Hero from "@/components/sections/Hero";
-import About from "@/components/sections/About";
-import Skills from "@/components/sections/Skills";
-import Timeline from "@/components/sections/Timeline";
+import ProofBullets from "@/components/sections/ProofBullets";
+import WillNotAutomate from "@/components/sections/WillNotAutomate";
+import Architecture from "@/components/sections/Architecture";
+import OfferCard from "@/components/sections/OfferCard";
+import Credentials from "@/components/sections/Credentials";
+import FAQ from "@/components/sections/FAQ";
 import Contact from "@/components/sections/Contact";
 
 export default function Home() {
   return (
-    <SmoothScroll>
-      <CustomCursor />
-      <SceneLoader />
-      <div id="scroll-container" className="relative z-10">
-        <Hero />
-        <About />
-        <Skills />
-        <Timeline />
-        <Contact />
-      </div>
-    </SmoothScroll>
+    <SiteShell>
+      <Hero />
+      <ProofBullets />
+      <WillNotAutomate />
+      <Architecture />
+      <OfferCard />
+      <Credentials />
+      <FAQ />
+      <Contact />
+    </SiteShell>
   );
 }

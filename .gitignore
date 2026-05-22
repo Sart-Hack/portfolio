@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# internal audit/review notes — not for public repo
+.audit/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

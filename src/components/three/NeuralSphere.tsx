@@ -2,7 +2,7 @@
 
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Float, Line } from "@react-three/drei";
+import { Float } from "@react-three/drei";
 import * as THREE from "three";
 import { scrollProgress } from "@/hooks/useScrollProgress";
 
@@ -49,7 +49,6 @@ function DataNode({
 }
 
 function ConnectionLines({ nodeCount }: { nodeCount: number }) {
-  const linesRef = useRef<(THREE.BufferGeometry | null)[]>([]);
   const groupRef = useRef<THREE.Group>(null);
 
   // Create line points that will be updated each frame

@@ -22,6 +22,8 @@ function CameraController() {
     const targetZ = Math.sin(angle) * radius;
     const targetY = Math.max(3, height);
 
+    // Mutating the three.js camera each frame is the standard r3f pattern.
+    // eslint-disable-next-line react-hooks/immutability
     camera.position.x = THREE.MathUtils.damp(camera.position.x, targetX, 2, delta);
     camera.position.y = THREE.MathUtils.damp(camera.position.y, targetY, 2, delta);
     camera.position.z = THREE.MathUtils.damp(camera.position.z, targetZ, 2, delta);
@@ -51,10 +53,10 @@ function SceneContent() {
       <CameraController />
       <AdaptiveDpr pixelated />
 
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[10, 15, 5]} intensity={1} color="#ffffff" />
+      <ambientLight intensity={0.25} />
+      <directionalLight position={[10, 15, 5]} intensity={0.4} color="#ffffff" />
       {!isMobile && (
-        <directionalLight position={[-5, 10, -5]} intensity={0.3} color="#ffffff" />
+        <directionalLight position={[-5, 10, -5]} intensity={0.15} color="#ffffff" />
       )}
 
       <CircuitCity />
@@ -72,7 +74,7 @@ export default function Scene() {
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       dpr={[1, 1.5]}
       style={{ background: "transparent" }}
-      frameloop="always"
+      frameloop="demand"
     >
       <Suspense fallback={null}>
         <SceneContent />

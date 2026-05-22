@@ -1,19 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export default function CustomCursor() {
   const spotlightRef = useRef<HTMLDivElement>(null);
-  const [isMounted, setIsMounted] = useState(false);
-  const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
-    setIsTouch(window.matchMedia("(pointer: coarse)").matches);
-  }, []);
-
-  useEffect(() => {
-    if (!isMounted || isTouch) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
 
     const spotlight = spotlightRef.current;
     if (!spotlight) return;
@@ -32,7 +25,6 @@ export default function CustomCursor() {
 
     let raf: number;
     const animate = () => {
-      // Smooth lerp for trailing effect
       currentX += (mouseX - currentX) * 0.15;
       currentY += (mouseY - currentY) * 0.15;
 
@@ -52,14 +44,13 @@ export default function CustomCursor() {
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMouseMove);
     };
-  }, [isMounted, isTouch]);
+  }, []);
 
-  if (!isMounted || isTouch) return null;
-
+  // Hidden on touch devices via CSS — avoids hydration-mismatch / setState-in-effect.
   return (
     <div
       ref={spotlightRef}
-      className="fixed inset-0 pointer-events-none z-[9998]"
+      className="fixed inset-0 pointer-events-none z-[9998] pointer-coarse:hidden"
     />
   );
 }
