@@ -6,7 +6,7 @@ import { gsap } from "@/lib/gsap";
 const items = [
   {
     q: "Why not just build this internally?",
-    a: "You can. The question is what your team's time is worth. Building a production agent system end-to-end (MCP servers, permissions, audit logs, evals, observability, integration with your existing tools) usually takes a senior engineer six to ten weeks of focused work. They have to learn the agent stack while building it. I've already done that learning on a dozen systems. Hire me for four weeks to ship a hardened pilot, or burn eight weeks of your engineer's time. The math usually wins for hiring me on the first one. Then your team owns and extends it.",
+    a: "You can. The question is what your team's time is worth. Building a production agent system end-to-end (MCP servers, permissions, audit logs, evals, observability, integration with your existing tools) usually takes a senior engineer six to ten weeks of focused work. They have to learn the agent stack while building it. I've already done that learning on systems for OpenAI, Anthropic, Meta, and other frontier labs. Hire me for four weeks to ship a hardened pilot, or burn eight weeks of your engineer's time. The math usually wins for hiring me on the first one. Then your team owns and extends it.",
   },
   {
     q: "Why not use n8n / Zapier / Make?",
@@ -19,10 +19,6 @@ const items = [
   {
     q: "Why not wait for our SaaS vendors to ship agents?",
     a: "Some will. Some won't. The ones who do will charge per seat and only work within their own product. If you want one agent that crosses tools (pulls from Zendesk, updates Linear, posts to Slack, checks HubSpot) no single vendor is going to ship that for you. That's where custom agents stay valuable indefinitely.",
-  },
-  {
-    q: "Why hire a solo consultant in India?",
-    a: "Three reasons. One, you get a specialist who's done this specifically. Two, you don't pay US-boutique markup. I'm priced at roughly half of a US-based AI consultancy with the same depth. Three, I work US hours and async-first, so geography doesn't actually impact the work. If you'd prefer a US-based agency for procurement reasons, I can refer one. It'll be $80–150k for what I'll do for $15–40k.",
   },
   {
     q: "What happens if you disappear?",

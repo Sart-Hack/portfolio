@@ -28,7 +28,6 @@ export default function WillNotAutomate() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
-  const captionRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -81,21 +80,6 @@ export default function WillNotAutomate() {
           });
         }
       });
-
-      if (captionRef.current) {
-        gsap.from(captionRef.current, {
-          opacity: 0,
-          y: 8,
-          duration: 0.8,
-          delay: 0.3,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: captionRef.current,
-            start: "top 95%",
-            toggleActions: "play none none none",
-          },
-        });
-      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -106,15 +90,11 @@ export default function WillNotAutomate() {
       <div className="relative max-w-5xl mx-auto">
         <h2
           ref={headingRef}
-          className="flex items-baseline gap-3 text-xl md:text-3xl font-semibold tracking-tight text-white mb-3"
+          className="flex items-baseline gap-3 text-xl md:text-3xl font-semibold tracking-tight text-white mb-10"
         >
           <span className="text-[#D97757] font-light leading-none">▎</span>
-          <span>Blast-radius limits, by default</span>
+          <span>What every agent I build will and won&apos;t do.</span>
         </h2>
-        <p className="text-sm md:text-base text-gray-400 mb-10 pl-6">
-          The first thing I scope with you is what your agent will never be
-          allowed to do.
-        </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div
@@ -163,17 +143,6 @@ export default function WillNotAutomate() {
             </ul>
           </div>
         </div>
-
-        <p
-          ref={captionRef}
-          className="mt-10 flex items-baseline gap-3 text-sm md:text-base text-gray-300"
-        >
-          <span className="text-[#D97757] font-light leading-none">▎</span>
-          <span>
-            I build agents with blast-radius limits. Most consultants pitch
-            what their agents can do. I lead with what yours won&apos;t.
-          </span>
-        </p>
       </div>
     </section>
   );
