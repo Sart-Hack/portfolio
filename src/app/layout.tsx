@@ -68,13 +68,20 @@ const jsonLd = {
     {
       "@type": "ProfessionalService",
       "@id": "https://sarthak-gupta.com/#service",
-      name: "Sarthak Gupta — AI Agent Consulting",
+      name: "Sarthak Gupta, AI Agent Consulting",
       url: "https://sarthak-gupta.com",
+      image: "https://sarthak-gupta.com/opengraph-image",
       provider: { "@id": "https://sarthak-gupta.com/#sarthak" },
       description:
         "Production AI agent builds for US tech companies past Series A. Scoped access, full audit trails, human-in-the-loop approval gates. Agents, not chatbots.",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "New Delhi",
+        addressCountry: "IN",
+      },
       areaServed: { "@type": "Country", name: "United States" },
       serviceType: "AI agent development",
+      priceRange: "$3,500",
       offers: {
         "@type": "Offer",
         name: "Agent Opportunity Audit",
