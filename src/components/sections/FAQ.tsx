@@ -22,7 +22,7 @@ const items = [
   },
   {
     q: "What happens if you disappear?",
-    a: "Three things. One, you own all the code, the infrastructure, and the runbook. It lives in your accounts, not mine. Two, every engagement includes a handover doc that lets an internal engineer maintain and extend the system without me. Three, the architecture I build is intentionally boring. Standard tools (Mastra, LiteLLM, Langfuse), standard patterns, no proprietary magic. If I disappeared tomorrow, your team could keep this running. That's a design constraint I impose on every project.",
+    a: "Three things. One, you own all the code, the infrastructure, and the runbook. It lives in your accounts, not mine. Two, every engagement includes a handover doc that lets an internal engineer maintain and extend the system without me. Three, the architecture I build is intentionally boring. Standard tools (Mastra, Bifrost, Langfuse), standard patterns, no proprietary magic. If I disappeared tomorrow, your team could keep this running. That's a design constraint I impose on every project.",
   },
 ];
 

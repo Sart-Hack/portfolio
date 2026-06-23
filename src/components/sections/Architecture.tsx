@@ -14,7 +14,7 @@ type Line =
 const SCRIPT: Line[] = [
   { kind: "prompt", text: "describe-stack" },
   { kind: "blank" },
-  { kind: "row", cols: ["LLM gateway", "LiteLLM", "egress: client VPC only"] },
+  { kind: "row", cols: ["LLM gateway", "Bifrost", "egress: client VPC only"] },
   { kind: "row", cols: ["Orchestrator", "Mastra", "runs in client infra"] },
   { kind: "row", cols: ["Observability", "Langfuse", "self-hosted, client owns data"] },
   { kind: "row", cols: ["Tool layer", "custom MCP", "least-privilege scoped"] },

@@ -61,7 +61,7 @@ const jsonLd = {
         "Eval suites",
         "Mastra",
         "LangGraph",
-        "LiteLLM",
+        "Bifrost",
         "Langfuse",
       ],
     },
