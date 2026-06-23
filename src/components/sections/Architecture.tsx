@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import { gsap } from "@/lib/gsap";
+import { DEMO_URL } from "@/lib/config";
 
 type Line =
   | { kind: "prompt"; text: string }
@@ -202,6 +203,35 @@ export default function Architecture() {
           <span className="text-[#D97757] font-light leading-none">▎</span>
           <span>Every outbound call is routed, logged, and governed by policy.</span>
         </p>
+
+        <a
+          href={DEMO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="
+            relative z-20 pointer-events-auto
+            mt-7 inline-flex items-center gap-2
+            text-sm md:text-base text-[#7AB4E8]
+            hover:text-white transition-colors
+          "
+          data-hover
+        >
+          See it running: the governed agent demo
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </a>
       </div>
     </section>
   );
