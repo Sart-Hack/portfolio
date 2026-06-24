@@ -5,6 +5,10 @@ import { gsap } from "@/lib/gsap";
 
 const items = [
   {
+    q: "Isn't this just guardrails?",
+    a: "Guardrails filter the model's text output and lean probabilistic. This authorizes the agent's actions. The check runs outside the model, returns a deterministic allow or deny on the specific call and its inputs, and leaves a record. Guardrails are one layer. This is the layer that decides whether the action happens at all.",
+  },
+  {
     q: "Why not just build this internally?",
     a: "You can. The question is what your team's time is worth. Building a production agent system end-to-end (MCP servers, permissions, audit logs, evals, observability, integration with your existing tools) usually takes a senior engineer six to ten weeks of focused work. They have to learn the agent stack while building it. I've already done that learning on systems for OpenAI, Anthropic, Meta, and other frontier labs. Hire me for four weeks to ship a hardened pilot, or burn eight weeks of your engineer's time. The math usually wins for hiring me on the first one. Then your team owns and extends it.",
   },

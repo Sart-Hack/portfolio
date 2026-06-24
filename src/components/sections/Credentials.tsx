@@ -92,8 +92,8 @@ export default function Credentials() {
               OpenAI, Anthropic, Meta, and others. That work taught me what
               production-grade AI systems require beyond the demo. Now
               I&apos;m bringing that into agent builds for US tech companies
-              that need real workflow automation without the data egress
-              risk.
+              that need agents doing real work, with control over what they
+              can do and proof of what they did.
             </p>
           </div>
         </div>

@@ -15,7 +15,7 @@ interface HeroProps {
 export default function Hero({
   headline = "I build AI agents your security team will actually approve.",
   subhead = "For US tech companies past Series A that need agents, not chatbots.",
-  body = "Your team wants AI to actually do work. Your security team wants nothing to leak. I build for both.",
+  body = "Your team wants agents that take real actions. Your security team wants to know what they can do, who approved it, and proof of what happened.",
   ctaCaption = "No pitch. We map your highest-friction workflow and you decide if a paid Audit is worth it.",
 }: HeroProps = {}) {
   const sectionRef = useRef<HTMLElement>(null);
