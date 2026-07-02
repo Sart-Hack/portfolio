@@ -14,21 +14,21 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sarthak-gupta.com"),
-  title: "Sarthak Gupta | AI agents your security team will approve",
+  title: "Sarthak Gupta | Cybersecurity for AI agents, one layer up",
   description:
-    "I build production AI agents for US tech companies past Series A. Scoped access, full audit trails, human-in-the-loop. Agents, not chatbots.",
+    "I install the security layer for AI agents: scoped access they can't exceed, human gates on destructive actions, and a replayable audit trail. For US tech companies past Series A.",
   openGraph: {
-    title: "Sarthak Gupta | AI agents your security team will approve",
+    title: "Sarthak Gupta | Cybersecurity for AI agents, one layer up",
     description:
-      "Production AI agent builds for US tech companies past Series A. Scoped access, full audit trails, human-in-the-loop.",
+      "The security layer for AI agents at US tech companies past Series A: scoped access, human gates on destructive actions, a full audit trail.",
     type: "website",
     url: "https://sarthak-gupta.com",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sarthak Gupta | AI agents your security team will approve",
+    title: "Sarthak Gupta | Cybersecurity for AI agents, one layer up",
     description:
-      "Production AI agent builds for US tech companies past Series A. Scoped access, full audit trails, human-in-the-loop.",
+      "The security layer for AI agents at US tech companies past Series A: scoped access, human gates on destructive actions, a full audit trail.",
   },
 };
 
@@ -42,7 +42,7 @@ const jsonLd = {
       url: "https://sarthak-gupta.com",
       jobTitle: "AI Agent Engineer",
       description:
-        "Builds production AI agent systems for US tech companies past Series A. Focuses on scoped access, audit trails, evals, and rollback.",
+        "Builds the security layer for AI agents at US tech companies past Series A. Focuses on scoped access, human approval gates, audit trails, evals, and rollback.",
       address: {
         "@type": "PostalAddress",
         addressLocality: "New Delhi",
@@ -73,7 +73,7 @@ const jsonLd = {
       image: "https://sarthak-gupta.com/opengraph-image",
       provider: { "@id": "https://sarthak-gupta.com/#sarthak" },
       description:
-        "Production AI agent builds for US tech companies past Series A. Scoped access, full audit trails, human-in-the-loop approval gates. Agents, not chatbots.",
+        "The security layer for AI agents at US tech companies past Series A: scoped access, full audit trails, human approval gates on destructive actions.",
       address: {
         "@type": "PostalAddress",
         addressLocality: "New Delhi",

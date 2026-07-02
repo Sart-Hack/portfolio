@@ -13,9 +13,9 @@ interface HeroProps {
 }
 
 export default function Hero({
-  headline = "I build AI agents your security team will actually approve.",
-  subhead = "For US tech companies past Series A that need agents, not chatbots.",
-  body = "Your team wants agents that take real actions. Your security team wants to know what they can do, who approved it, and proof of what happened.",
+  headline = "An AI agent got a company's ad account permanently banned.",
+  subhead = "Nobody attacked it. It just had too much access and nothing enforcing what it could do.",
+  body = "It moved money at machine speed until the platform's fraud systems terminated the company's entire ad account. No warning, no appeal. I install the layer that stops it: scoped access the agent can't exceed, a human gate on anything that touches money or data, and proof of every action. Cybersecurity for AI agents, one layer up.",
   ctaCaption = "No pitch. We map your highest-friction workflow and you decide if a paid Audit is worth it.",
 }: HeroProps = {}) {
   const sectionRef = useRef<HTMLElement>(null);

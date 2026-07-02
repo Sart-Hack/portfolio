@@ -6,7 +6,7 @@ import { gsap } from "@/lib/gsap";
 const items = [
   {
     q: "Isn't this just guardrails?",
-    a: "Guardrails filter the model's text output and lean probabilistic. This authorizes the agent's actions. The check runs outside the model, returns a deterministic allow or deny on the specific call and its inputs, and leaves a record. Guardrails are one layer. This is the layer that decides whether the action happens at all.",
+    a: "Guardrails put the safety in a prompt or a text filter, and a model can be talked out of a suggestion. This authorizes the agent's actions instead. The check runs outside the model, returns a deterministic allow or deny on the specific call and its inputs, and leaves a record. Guardrails are one layer. This is the layer that decides whether the action happens at all.",
   },
   {
     q: "Why not just build this internally?",

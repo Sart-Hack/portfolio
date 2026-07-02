@@ -69,6 +69,16 @@ export default function ProofBullets() {
       className="relative px-6 md:px-16 pt-32 pb-20"
     >
       <div className="relative max-w-6xl mx-auto">
+        <div className="mb-12 max-w-2xl">
+          <h2 className="flex items-baseline gap-3 text-xl md:text-3xl font-semibold tracking-tight text-white">
+            <span className="text-[#D97757] font-light leading-none">▎</span>
+            <span>A line in a prompt is a suggestion.</span>
+          </h2>
+          <p className="mt-4 pl-6 text-sm md:text-base text-gray-300 leading-relaxed">
+            A model can be talked out of a suggestion. So the controls that stop
+            a bad action live outside the model, not in the prompt.
+          </p>
+        </div>
         <div
           ref={cardsRef}
           className="proof-cards grid grid-cols-1 md:grid-cols-3 gap-5"
