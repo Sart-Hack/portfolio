@@ -9,20 +9,16 @@ const items = [
     a: "Guardrails put the safety in a prompt or a text filter, and a model can be talked out of a suggestion. This authorizes the agent's actions instead. The check runs outside the model, returns a deterministic allow or deny on the specific call and its inputs, and leaves a record. Guardrails are one layer. This is the layer that decides whether the action happens at all.",
   },
   {
+    q: "How is this different from AI agent security tools?",
+    a: "Most of them are runtime products that watch an agent, learn what looks normal, and flag or block what doesn't. That's probabilistic, and it's bolted on after the fact. I build the controls into the agent system itself: policy as code that returns a deterministic allow or deny on every action before it runs, plus the audit trail that proves what happened. You own it, it runs in your infrastructure, and it's built for the specific agent you're shipping, not a generic wrapper around it.",
+  },
+  {
     q: "Why not just build this internally?",
-    a: "You can. The question is what your team's time is worth. Building a production agent system end-to-end (MCP servers, permissions, audit logs, evals, observability, integration with your existing tools) usually takes a senior engineer six to ten weeks of focused work. They have to learn the agent stack while building it. I've already done that learning on systems for OpenAI, Anthropic, Meta, and other frontier labs. Hire me for four weeks to ship a hardened pilot, or burn eight weeks of your engineer's time. The math usually wins for hiring me on the first one. Then your team owns and extends it.",
+    a: "You can. The question is what your team's time is worth. Building a production agent system end-to-end (MCP servers, permissions, audit logs, evals, observability, integration with your existing tools) usually takes a senior engineer six to ten weeks of focused work. They have to learn the agent stack while building it. I've already done that learning on systems for OpenAI, Anthropic, Meta, and other frontier labs. Hire me for four weeks to ship a hardened pilot, or burn eight weeks of your engineer's time. Then your team owns and extends it.",
   },
   {
-    q: "Why not use n8n / Zapier / Make?",
-    a: "Those are great for deterministic workflows. If X then Y. The minute you need actual reasoning (is this customer angry, is this PII, should this escalate) you've outgrown them. Most teams I work with already have n8n or Zapier. We use them as the orchestration layer underneath the agent. Complementary, not competitive.",
-  },
-  {
-    q: "Why not use ChatGPT Enterprise / Claude Team?",
-    a: "Those are chat tools. Great if you want your team to ask AI questions. They don't do work. They can't read your Linear board, update your Zendesk tickets, post to your Slack. Not without an engineer building MCP servers between them. That's the gap I fill. Turning chat into agents that take action with guardrails.",
-  },
-  {
-    q: "Why not wait for our SaaS vendors to ship agents?",
-    a: "Some will. Some won't. The ones who do will charge per seat and only work within their own product. If you want one agent that crosses tools (pulls from Zendesk, updates Linear, posts to Slack, checks HubSpot) no single vendor is going to ship that for you. That's where custom agents stay valuable indefinitely.",
+    q: "Do you replace my security team?",
+    a: "No. I give them what they need to say yes. Most security teams don't want to block agents, they want to see what an agent can do, what it can't, and a record they can review. I build those controls and hand your team the permission matrix, the policies, and the audit trail. You keep the sign-off. I make it something you can actually sign off on.",
   },
   {
     q: "What happens if you disappear?",

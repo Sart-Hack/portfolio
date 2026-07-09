@@ -5,10 +5,10 @@ import { gsap } from "@/lib/gsap";
 import { BOOKING_URL } from "@/lib/config";
 
 const included = [
-  "Workflow audit and process map",
-  "Three to five candidate workflows ranked by ROI and risk",
-  "Tool permission matrix and data classification draft",
-  "Recommended pilot scope with timeline and price",
+  "Action and access map: everything the agent can do and reach",
+  "Blast-radius review: what breaks if it acts wrong, and where",
+  "Permission matrix and data-classification draft",
+  "Prioritized governance gaps with a plan to close each one",
   "30-minute readout call",
 ];
 
@@ -83,7 +83,7 @@ export default function OfferCard() {
           </div>
 
           <h2 className="text-2xl md:text-4xl font-semibold tracking-tight text-white leading-tight">
-            Agent Opportunity Audit
+            Agent Readiness Audit
           </h2>
 
           <div className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1">
@@ -97,9 +97,11 @@ export default function OfferCard() {
           <div className="h-[1px] w-12 bg-white/15 mt-7 mb-7" />
 
           <p className="text-base md:text-lg text-gray-200 leading-relaxed">
-            I map your highest-friction workflow, identify three to five
-            automation candidates, and write you a deployment plan with risk
-            and ROI estimates. No prototype, no commitment beyond the week.
+            I take an agent you&apos;re building or already running and
+            pressure-test whether it&apos;s safe to put into production: what it
+            can touch, what could go wrong, and what has to be true before your
+            security team signs off. You get the gaps and the plan to close
+            them. No commitment beyond the week.
           </p>
 
           <div className="mt-9">
@@ -156,7 +158,7 @@ export default function OfferCard() {
               </svg>
             </a>
             <span className="text-xs md:text-sm text-gray-400">
-              We map your workflow. You decide if a paid Audit is worth it.
+              We pressure-test one agent. You decide if a paid audit is worth it.
             </span>
           </div>
         </div>

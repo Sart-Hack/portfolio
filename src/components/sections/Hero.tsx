@@ -13,10 +13,10 @@ interface HeroProps {
 }
 
 export default function Hero({
-  headline = "An AI agent got a company's ad account permanently banned.",
-  subhead = "Nobody attacked it. It just had too much access and nothing enforcing what it could do.",
-  body = "It moved money at machine speed until the platform's fraud systems terminated the company's entire ad account. No warning, no appeal. I install the layer that stops it: scoped access the agent can't exceed, a human gate on anything that touches money or data, and proof of every action. Cybersecurity for AI agents, one layer up.",
-  ctaCaption = "No pitch. We map your highest-friction workflow and you decide if a paid Audit is worth it.",
+  headline = "Give AI agents real work, not unchecked power.",
+  subhead = "I build the control layer that decides what your AI agents are allowed to do in production, before they act.",
+  body = "The moment an agent can act in your systems (issue a refund, change a record, message a customer), a line in a prompt asking it to behave is not a control. I build the layer that puts the decision outside the model: every action is checked against policy before it runs, anything high-risk waits for a human, and every decision is logged. Deterministic, not a filter you hope holds. So you can put agents into real operations, and prove to your security team exactly what they can and cannot do.",
+  ctaCaption = "No pitch. We pressure-test an agent you're building and whether it's safe to ship. You decide if a paid audit is worth it.",
 }: HeroProps = {}) {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
