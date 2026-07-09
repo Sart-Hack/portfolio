@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "Sarthak Gupta. AI agents your security team will actually approve.";
+  "Sarthak Gupta. Give AI agents real work, not unchecked power.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -61,7 +61,7 @@ export default function Image() {
               display: "flex",
             }}
           >
-            I build AI agents your security team will actually approve.
+            Give AI agents real work, not unchecked power.
           </div>
           <div
             style={{
@@ -72,7 +72,8 @@ export default function Image() {
               display: "flex",
             }}
           >
-            For US tech companies past Series A that need agents, not chatbots.
+            For US tech companies past Series A. Every action checked against
+            policy, before it runs.
           </div>
         </div>
 
