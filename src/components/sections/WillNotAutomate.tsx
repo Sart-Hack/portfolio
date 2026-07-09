@@ -16,10 +16,12 @@ const wontDo = [
 
 const alwaysHas = [
   "A documented permission matrix (who can do what)",
+  "Scoped, least-privilege credentials for every tool it can reach",
   "Audit logs for every tool call (exportable, queryable)",
   "Human-approval gates on customer-facing or high-blast-radius actions",
   "Eval suite for known failure modes",
   "Rollback or undo plan for any state-changing operation",
+  "A kill switch to disable any tool without a redeploy",
   "Failure-mode visibility (agent refuses unsafe requests and says why)",
 ];
 

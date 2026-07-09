@@ -68,7 +68,7 @@ export default function ProofBullets() {
       ref={sectionRef}
       className="relative px-6 md:px-16 pt-32 pb-20"
     >
-      <div className="relative max-w-6xl mx-auto">
+      <div className="relative max-w-5xl mx-auto">
         <div className="mb-12 max-w-2xl">
           <h2 className="flex items-baseline gap-3 text-xl md:text-3xl font-semibold tracking-tight text-white">
             <span className="text-[#D97757] font-light leading-none">▎</span>
@@ -96,7 +96,7 @@ export default function ProofBullets() {
               <div className="text-[11px] uppercase tracking-[0.18em] text-gray-400 mb-4 font-medium font-mono">
                 {b.label}
               </div>
-              <h3 className="text-lg md:text-xl font-semibold text-white leading-snug mb-3">
+              <h3 className="text-lg md:text-xl font-semibold text-white leading-snug mb-3 md:min-h-[2lh]">
                 {b.headline}
               </h3>
               <p className="text-sm md:text-base text-gray-300 leading-relaxed">

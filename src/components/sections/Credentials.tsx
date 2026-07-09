@@ -88,7 +88,7 @@ export default function Credentials() {
             </p>
             <p>
               For the last two years, I&apos;ve worked on AI training and
-              agent systems via Turing, Ignitech, and G2i, on projects for
+              agent systems via Turing, IgniteTech, and G2i, on projects for
               OpenAI, Anthropic, Meta, and others. That work taught me what
               production-grade AI systems require beyond the demo. Now
               I&apos;m bringing that into agent builds for US tech companies

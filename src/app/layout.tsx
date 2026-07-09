@@ -14,21 +14,21 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sarthak-gupta.com"),
-  title: "Sarthak Gupta | Cybersecurity for AI agents, one layer up",
+  title: "Sarthak Gupta | Give AI agents real work, not unchecked power",
   description:
-    "I install the security layer for AI agents: scoped access they can't exceed, human gates on destructive actions, and a replayable audit trail. For US tech companies past Series A.",
+    "I build the control layer that decides what your AI agents are allowed to do in production, before they act. Policy-checked, human-gated, fully logged.",
   openGraph: {
-    title: "Sarthak Gupta | Cybersecurity for AI agents, one layer up",
+    title: "Sarthak Gupta | Give AI agents real work, not unchecked power",
     description:
-      "The security layer for AI agents at US tech companies past Series A: scoped access, human gates on destructive actions, a full audit trail.",
+      "The control layer for AI agents at US tech companies past Series A: every action checked against policy before it runs, high-risk actions gated, all of it logged.",
     type: "website",
     url: "https://sarthak-gupta.com",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sarthak Gupta | Cybersecurity for AI agents, one layer up",
+    title: "Sarthak Gupta | Give AI agents real work, not unchecked power",
     description:
-      "The security layer for AI agents at US tech companies past Series A: scoped access, human gates on destructive actions, a full audit trail.",
+      "The control layer for AI agents at US tech companies past Series A: every action checked against policy before it runs, high-risk actions gated, all of it logged.",
   },
 };
 
@@ -42,7 +42,7 @@ const jsonLd = {
       url: "https://sarthak-gupta.com",
       jobTitle: "AI Agent Engineer",
       description:
-        "Builds the security layer for AI agents at US tech companies past Series A. Focuses on scoped access, human approval gates, audit trails, evals, and rollback.",
+        "Builds the control layer for AI agents at US tech companies past Series A: pre-action policy checks, human approval gates, audit trails, evals, and rollback.",
       address: {
         "@type": "PostalAddress",
         addressLocality: "New Delhi",
@@ -73,7 +73,7 @@ const jsonLd = {
       image: "https://sarthak-gupta.com/opengraph-image",
       provider: { "@id": "https://sarthak-gupta.com/#sarthak" },
       description:
-        "The security layer for AI agents at US tech companies past Series A: scoped access, full audit trails, human approval gates on destructive actions.",
+        "The control layer for AI agents at US tech companies past Series A: every action checked against policy before it runs, high-risk actions gated, all of it logged.",
       address: {
         "@type": "PostalAddress",
         addressLocality: "New Delhi",
@@ -84,11 +84,11 @@ const jsonLd = {
       priceRange: "$3,500",
       offers: {
         "@type": "Offer",
-        name: "Agent Opportunity Audit",
+        name: "Agent Readiness Audit",
         price: "3500",
         priceCurrency: "USD",
         description:
-          "One-week workflow audit. Process map, three to five candidate workflows ranked by ROI and risk, tool permission matrix, data classification draft, recommended pilot scope with timeline and price, 30-minute readout call.",
+          "One-week agent readiness audit. Action and access map, blast-radius review, permission matrix and data-classification draft, prioritized governance gaps with a plan to close each one, 30-minute readout call.",
       },
     },
   ],

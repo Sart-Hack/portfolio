@@ -36,53 +36,61 @@ export default function TextReveal({
           ? { type: "lines,words" as const, mask: "lines" as const }
           : { type: "lines,words" as const, mask: "lines" as const };
 
+    let ctx: gsap.Context | undefined;
+
+    // autoSplit re-splits on font load and container resize (e.g. phone rotation),
+    // so line boxes never stay baked at a stale width. It re-runs onSplit each time.
     const split = SplitText.create(ref.current, {
       ...splitConfig,
       linesClass: "split-line",
+      autoSplit: true,
+      onSplit: (self) => {
+        ctx?.revert();
+
+        const targets =
+          splitType === "chars"
+            ? self.chars
+            : splitType === "words"
+              ? self.words
+              : self.lines;
+
+        ctx = gsap.context(() => {
+          const baseAnimation = {
+            yPercent: splitType === "lines" ? 110 : 80,
+            opacity: 0,
+            rotateX: splitType === "chars" ? -40 : 0,
+            stagger: splitType === "chars" ? 0.02 : splitType === "words" ? 0.04 : stagger,
+            ease: scrub ? "none" : "power4.out",
+          };
+
+          if (scrub) {
+            gsap.from(targets, {
+              ...baseAnimation,
+              scrollTrigger: {
+                trigger: ref.current,
+                start: "top 88%",
+                end: "top 45%",
+                scrub: 1.5,
+              },
+            });
+          } else {
+            gsap.from(targets, {
+              ...baseAnimation,
+              duration: splitType === "chars" ? 0.7 : 1.1,
+              delay,
+              scrollTrigger: {
+                trigger: ref.current,
+                start: "top 88%",
+                toggleActions: "play none none none",
+              },
+            });
+          }
+        }, ref);
+      },
     });
 
-    const targets =
-      splitType === "chars"
-        ? split.chars
-        : splitType === "words"
-          ? split.words
-          : split.lines;
-
-    const ctx = gsap.context(() => {
-      const baseAnimation = {
-        yPercent: splitType === "lines" ? 110 : 80,
-        opacity: 0,
-        rotateX: splitType === "chars" ? -40 : 0,
-        stagger: splitType === "chars" ? 0.02 : splitType === "words" ? 0.04 : stagger,
-        ease: scrub ? "none" : "power4.out",
-      };
-
-      if (scrub) {
-        gsap.from(targets, {
-          ...baseAnimation,
-          scrollTrigger: {
-            trigger: ref.current,
-            start: "top 88%",
-            end: "top 45%",
-            scrub: 1.5,
-          },
-        });
-      } else {
-        gsap.from(targets, {
-          ...baseAnimation,
-          duration: splitType === "chars" ? 0.7 : 1.1,
-          delay,
-          scrollTrigger: {
-            trigger: ref.current,
-            start: "top 88%",
-            toggleActions: "play none none none",
-          },
-        });
-      }
-    }, ref);
-
     return () => {
-      ctx.revert();
+      ctx?.revert();
       split.revert();
     };
   }, [delay, stagger, scrub, splitType]);

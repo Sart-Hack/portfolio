@@ -137,7 +137,7 @@ export default function OfferCard() {
                 bg-white text-[#0a0a0f] font-medium
                 hover:bg-white/90 hover:border-white
                 transition-colors
-                w-full sm:w-auto
+                w-full sm:w-auto sm:shrink-0 whitespace-nowrap
               "
               data-hover
             >
@@ -152,6 +152,7 @@ export default function OfferCard() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 aria-hidden="true"
+                className="shrink-0"
               >
                 <line x1="5" y1="12" x2="19" y2="12" />
                 <polyline points="12 5 19 12 12 19" />

@@ -15,7 +15,7 @@ interface HeroProps {
 export default function Hero({
   headline = "Give AI agents real work, not unchecked power.",
   subhead = "I build the control layer that decides what your AI agents are allowed to do in production, before they act.",
-  body = "The moment an agent can act in your systems (issue a refund, change a record, message a customer), a line in a prompt asking it to behave is not a control. I build the layer that puts the decision outside the model: every action is checked against policy before it runs, anything high-risk waits for a human, and every decision is logged. Deterministic, not a filter you hope holds. So you can put agents into real operations, and prove to your security team exactly what they can and cannot do.",
+  body = "Once an agent can issue a refund or message a customer, a prompt asking it to behave is not a control. I put the decision outside the model: every action is checked against policy before it runs, high-risk ones wait for a human, and all of it is logged. So you can ship agents into real operations and prove exactly what they can and cannot do.",
   ctaCaption = "No pitch. We pressure-test an agent you're building and whether it's safe to ship. You decide if a paid audit is worth it.",
 }: HeroProps = {}) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -82,7 +82,7 @@ export default function Hero({
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen flex flex-col items-center justify-center px-4 py-24"
+      className="relative min-h-svh flex flex-col items-center justify-center px-4 pt-20 pb-28"
     >
       <div
         ref={contentRef}
@@ -91,7 +91,7 @@ export default function Hero({
       >
         <TextReveal
           as="h1"
-          className="text-3xl sm:text-4xl md:text-6xl font-semibold tracking-tight text-white leading-[1.1]"
+          className="text-3xl sm:text-4xl md:text-6xl font-semibold tracking-tight text-white leading-[1.1] text-balance"
           delay={0.1}
           splitType="words"
         >
@@ -100,7 +100,7 @@ export default function Hero({
 
         <TextReveal
           as="p"
-          className="mt-5 text-xl md:text-3xl text-gray-100 leading-snug max-w-3xl mx-auto font-medium"
+          className="mt-4 text-xl md:text-3xl text-gray-100 leading-snug max-w-3xl mx-auto font-medium text-balance"
           delay={0.5}
           splitType="words"
         >
@@ -109,19 +109,19 @@ export default function Hero({
 
         <div
           ref={lineRef}
-          className="mx-auto mt-10 h-[1px] w-16 bg-white/20 origin-center"
+          className="mx-auto mt-6 h-[1px] w-16 bg-white/20 origin-center"
         />
 
         <TextReveal
           as="p"
-          className="mt-10 text-base md:text-lg text-gray-200 max-w-2xl mx-auto"
+          className="mt-6 text-base md:text-lg text-gray-200 max-w-2xl mx-auto text-pretty"
           delay={0.9}
           splitType="lines"
         >
           {body}
         </TextReveal>
 
-        <div ref={ctaRef} className="mt-12 flex flex-col items-center gap-3">
+        <div ref={ctaRef} className="mt-10 flex flex-col items-center gap-3">
           <a
             href={BOOKING_URL}
             target="_blank"
@@ -161,7 +161,7 @@ export default function Hero({
 
       <div
         ref={scrollIndicatorRef}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <div className="flex flex-col items-center gap-3">
           <span className="text-[10px] text-gray-600 uppercase tracking-[0.25em] font-medium">
